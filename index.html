@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DarkSpot Lens — AI-Assisted Information Gap & Conflict Detection</title>
+  <meta name="description" content="Search tells you what exists. DarkSpot Lens reveals what is missing, what disagrees, what is stale, and what to verify next.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234F46E5'><circle cx='10.5' cy='10.5' r='7.5' stroke='white' stroke-width='2'/><circle cx='10.5' cy='10.5' r='3.5' fill='white'/><line x1='16' y1='16' x2='22' y2='22' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-icon" title="DarkSpot Lens Logo">
+          <!-- Magnifier with dark spot inside -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <circle cx="11" cy="11" r="3.2" fill="currentColor"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <h1>DarkSpot Lens <span class="pill-badge hackathon">Hackathon 2026</span></h1>
+          <div class="brand-tagline">AI-Assisted Information Gap & Conflict Detection Platform</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="quick-demo-btn" class="btn-secondary" title="Load Golden Scholarship Demo Scenario">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Load Golden Demo
+        </button>
+        <button id="open-limits-btn" class="btn-secondary" title="View Transparency & Analysis Limits">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Analysis Limits
+        </button>
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Light / Dark Mode">
+          <svg id="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- Investigation Setup & Goal Input Card -->
+    <section class="setup-card" id="setup-card">
+      <div class="setup-header">
+        <div>
+          <h2>New Investigation</h2>
+          <p>Search tells you what exists. DarkSpot Lens detects what is omitted, conflicting, or outdated across multiple sources.</p>
+        </div>
+        <button id="sample-scenario-btn" class="demo-fill-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+          Try Sample Scenario: Aurora Scholarship
+        </button>
+      </div>
+
+      <div class="setup-form-grid">
+        <div class="form-group">
+          <label for="goal-input" class="form-label">
+            <span>Research Goal / Decision Question</span>
+            <span class="form-hint">Be specific about the scheme or opportunity</span>
+          </label>
+          <textarea id="goal-input" class="goal-textarea" rows="3" placeholder="e.g. What should I verify before applying to the Aurora Merit Scholarship 2026? What are the renewal rules and mandatory documents?"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="domain-select" class="form-label">
+            <span>Domain Template</span>
+            <span class="form-hint">Pre-populates expected aspects</span>
+          </label>
+          <select id="domain-select" class="domain-select">
+            <option value="scholarship" selected>🎓 Scholarship & Grants</option>
+            <option value="government">🏛️ Government Scheme & Subsidy</option>
+            <option value="career">💼 Job & Career Application</option>
+            <option value="admissions">🏫 University Course & Admission</option>
+            <option value="general">🔍 General Policy / Business</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Sources Collection Box -->
+      <div class="sources-box">
+        <div class="sources-box-header">
+          <div class="sources-box-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            Sources to Cross-Examine (up to 8 URLs or pasted texts)
+            <span id="source-counter-badge" class="source-count-tag">5 Loaded</span>
+          </div>
+          <div class="text-secondary" style="font-size: 12px;">Minimum 2 sources required for conflict detection</div>
+        </div>
+
+        <div id="sources-chip-container" class="source-chips-grid">
+          <!-- Dynamically populated chips -->
+        </div>
+
+        <div class="add-source-bar">
+          <input type="url" id="new-url-input" class="add-source-input" placeholder="Paste source URL (e.g. https://portal.edu/scholarship-notice) ...">
+          <button id="add-url-btn" class="btn-secondary" style="padding: 8px 16px;">+ Add URL</button>
+          <button id="paste-text-modal-btn" class="btn-secondary" style="padding: 8px 16px;">📄 Paste Text</button>
+        </div>
+      </div>
+
+      <div class="form-actions-bar">
+        <div style="font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Server-side SSRF validation & quote verification enabled
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button id="reset-setup-btn" class="btn-secondary">Clear All</button>
+          <button id="run-analysis-btn" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            Run Deep Analysis
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Processing Stepper (Revealed when running analysis) -->
+    <section id="stepper-section" class="stepper-container">
+      <div class="stepper-header">
+        <h3>
+          <svg class="spin-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+          Analyzing Sources & Synthesizing Information Gaps...
+        </h3>
+        <span id="stepper-timer" class="font-mono" style="font-size: 13px; color: var(--muted);">0.0s</span>
+      </div>
+
+      <div class="stepper-steps">
+        <div class="step-item active" id="step-1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Collect Sources</div>
+        </div>
+        <div class="step-item" id="step-2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Extract & Dates</div>
+        </div>
+        <div class="step-item" id="step-3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Extract Claims</div>
+        </div>
+        <div class="step-item" id="step-4">
+          <div class="step-circle">4</div>
+          <div class="step-label">Verify Quotes</div>
+        </div>
+        <div class="step-item" id="step-5">
+          <div class="step-circle">5</div>
+          <div class="step-label">Detect Gaps & Conflicts</div>
+        </div>
+        <div class="step-item" id="step-6">
+          <div class="step-circle">6</div>
+          <div class="step-label">Rank Checklist</div>
+        </div>
+      </div>
+
+      <div class="stepper-log" id="stepper-log">
+        <div class="log-line active">▶ Initializing SSRF-safe fetch pipelines across 5 sources...</div>
+      </div>
+    </section>
+
+    <!-- Main Results Dashboard (Always active after analysis) -->
+    <div id="results-dashboard">
+
+      <!-- Metrics Headline Strip (Clickable Filters) -->
+      <section class="metrics-strip">
+        <div class="metric-card sources" id="metric-sources-card" title="View Source Details">
+          <div class="metric-icon-wrap">🌐</div>
+          <div>
+            <div class="metric-value" id="count-sources">5</div>
+            <div class="metric-label">Sources Reviewed</div>
+          </div>
+        </div>
+
+        <div class="metric-card gaps" id="metric-gaps-card" title="Filter to Potential Gaps">
+          <div class="metric-icon-wrap">⭕</div>
+          <div>
+            <div class="metric-value" id="count-gaps">3</div>
+            <div class="metric-label">Potential Gaps</div>
+          </div>
+        </div>
+
+        <div class="metric-card conflicts" id="metric-conflicts-card" title="Filter to Possible Conflicts">
+          <div class="metric-icon-wrap">⇄</div>
+          <div>
+            <div class="metric-value" id="count-conflicts">2</div>
+            <div class="metric-label">Possible Conflicts</div>
+          </div>
+        </div>
+
+        <div class="metric-card stale" id="metric-stale-card" title="Filter to Stale or Undated Sources">
+          <div class="metric-icon-wrap">⏱️</div>
+          <div>
+            <div class="metric-value" id="count-stale">2</div>
+            <div class="metric-label">Stale / Undated</div>
+          </div>
+        </div>
+
+        <div class="metric-card checklist" id="metric-checklist-card" title="Jump to Action Checklist">
+          <div class="metric-icon-wrap">☑️</div>
+          <div>
+            <div class="metric-value" id="count-actions">9</div>
+            <div class="metric-label">Action Items</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2-Column Dashboard Layout -->
+      <div class="dashboard-grid">
+
+        <!-- Left Column: Tabs & Content -->
+        <div class="dashboard-left-col">
+
+          <div class="dashboard-tabs-bar">
+            <button class="tab-btn active" data-tab="matrix-tab">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+              Coverage Matrix ⭐
+              <span class="tab-count">Signature</span>
+            </button>
+            <button class="tab-btn" data-tab="findings-tab">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              All Findings
+              <span class="tab-count" id="tab-findings-count">7</span>
+            </button>
+            <button class="tab-btn" data-tab="sources-tab">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              Source Evidence
+              <span class="tab-count">5</span>
+            </button>
+            <button class="tab-btn" data-tab="agreement-tab">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              What Sources Agree On
+              <span class="tab-count">4</span>
+            </button>
+          </div>
+
+          <!-- TAB 1: Coverage Matrix ⭐ -->
+          <div id="matrix-tab" class="tab-content active">
+            <div class="matrix-container">
+              <div class="matrix-header">
+                <div>
+                  <h3 style="font-size: 15px; font-weight: 700;">Expected-Aspect Coverage Matrix</h3>
+                  <div style="font-size: 12px; color: var(--muted); margin-top: 2px;">
+                    Cross-referencing domain checklist against sources reviewed. Click any cell to inspect source quotes.
+                  </div>
+                </div>
+
+                <div class="matrix-legend">
+                  <div class="legend-item"><span style="color: var(--found);">✔</span> Found</div>
+                  <div class="legend-item"><span style="color: var(--conflict);">◐</span> Partial / Conflicting</div>
+                  <div class="legend-item"><span style="color: var(--gap);">✕</span> Not Found (Gap)</div>
+                </div>
+              </div>
+
+              <div class="matrix-table-wrap">
+                <table class="matrix-table">
+                  <thead>
+                    <tr>
+                      <th class="matrix-aspect-th">
+                        <div>Expected Aspect</div>
+                        <div style="font-size: 11px; font-weight: 400; color: var(--muted);">Domain: Scholarship</div>
+                      </th>
+                      <th class="matrix-col-source">
+                        <div class="source-header-domain">aurorascholarship.org</div>
+                        <div class="source-header-meta">
+                          <span class="pill-badge" style="background: rgba(5,150,105,0.1); color: var(--found);">Official</span>
+                          <span>Oct 2026</span>
+                        </div>
+                      </th>
+                      <th class="matrix-col-source">
+                        <div class="source-header-domain">studentprephub.in</div>
+                        <div class="source-header-meta">
+                          <span class="pill-badge" style="background: rgba(79,70,229,0.1); color: var(--brand);">Blog</span>
+                          <span>Sep 2026</span>
+                        </div>
+                      </th>
+                      <th class="matrix-col-source">
+                        <div class="source-header-domain">edutrack-national.gov</div>
+                        <div class="source-header-meta">
+                          <span class="pill-badge" style="background: rgba(79,70,229,0.1); color: var(--brand);">Portal</span>
+                          <span>Oct 2026</span>
+                        </div>
+                      </th>
+                      <th class="matrix-col-source">
+                        <div class="source-header-domain">campusgazette.news</div>
+                        <div class="source-header-meta">
+                          <span class="pill-badge" style="background: rgba(234,88,12,0.1); color: var(--stale);">Stale '24</span>
+                          <span>May 2024</span>
+                        </div>
+                      </th>
+                      <th class="matrix-col-source">
+                        <div class="source-header-domain">collegediscussion.net</div>
+                        <div class="source-header-meta">
+                          <span class="pill-badge" style="background: rgba(100,116,139,0.1); color: var(--uncertain);">Undated</span>
+                          <span>No date</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="matrix-tbody">
+                    <!-- Populated dynamically via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: All Findings -->
+          <div id="findings-tab" class="tab-content">
+            <div class="findings-filter-bar">
+              <button class="filter-btn active" data-filter="all">All Findings (7)</button>
+              <button class="filter-btn" data-filter="gap">⭕ Potential Gaps (3)</button>
+              <button class="filter-btn" data-filter="conflict">⇄ Possible Conflicts (2)</button>
+              <button class="filter-btn" data-filter="stale">⏱️ Staleness & Cycle (2)</button>
+              <button class="filter-btn" data-filter="question">💡 Unanswered Questions (2)</button>
+            </div>
+
+            <div class="findings-list" id="findings-list">
+              <!-- Findings rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- TAB 3: Source Evidence Deep Dive -->
+          <div id="sources-tab" class="tab-content">
+            <div class="findings-list" id="sources-list">
+              <!-- Sources rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- TAB 4: What Sources Agree On -->
+          <div id="agreement-tab" class="tab-content">
+            <div class="setup-card" style="padding: 24px;">
+              <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <span style="color: var(--found);">✔</span> Corroborated Core Claims (High Confidence)
+              </h3>
+              <p style="font-size: 13px; color: var(--muted); margin-bottom: 18px;">
+                These facts are mutually confirmed across multiple active sources without conflicting statements.
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 12px;" id="agreements-list">
+                <!-- Dynamically populated agreement cards -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Sticky Verify-Next Checklist ⭐ -->
+        <aside class="dashboard-right-col">
+          <div class="checklist-panel">
+            <div class="checklist-header">
+              <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                Verify-Next Checklist ⭐
+              </h3>
+              <span id="checklist-counter" class="pill-badge" style="background: var(--found-bg); color: var(--found);">0 / 9 Done</span>
+            </div>
+
+            <div class="checklist-progress-wrap">
+              <div class="progress-bar-bg">
+                <div id="checklist-progress-bar" class="progress-bar-fill" style="width: 0%;"></div>
+              </div>
+              <div class="progress-label">
+                <span>Verification progress</span>
+                <span id="checklist-pct-label">0%</span>
+              </div>
+            </div>
+
+            <div class="checklist-items" id="checklist-items-container">
+              <!-- Checkable items populated dynamically -->
+            </div>
+
+            <div class="checklist-footer">
+              <button id="copy-markdown-btn" class="copy-markdown-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy as Markdown
+              </button>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Evidence Drawer (Slide-in) -->
+  <div id="drawer-backdrop" class="drawer-backdrop">
+    <div class="evidence-drawer" id="evidence-drawer">
+      <div class="drawer-header">
+        <div>
+          <span id="drawer-provenance-badge" class="provenance-tag sourced">SOURCED</span>
+          <h3 id="drawer-title" style="font-size: 18px; font-weight: 700; margin-top: 6px;">Finding Evidence</h3>
+        </div>
+        <button id="drawer-close-btn" class="drawer-close-btn" aria-label="Close drawer">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="drawer-meta-card">
+          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--muted);">Source Reference</div>
+          <div id="drawer-source-title" style="font-size: 14px; font-weight: 600; margin-top: 2px;">Official Aurora Scholarship Guidelines</div>
+          <div id="drawer-source-url" class="font-mono" style="font-size: 12px; color: var(--brand); margin-top: 2px;">https://aurorascholarship.org/2026-guidelines</div>
+          
+          <div class="confidence-indicator">
+            <span>Confidence:</span>
+            <div class="confidence-dots" id="drawer-confidence-dots">
+              <div class="confidence-dot filled"></div>
+              <div class="confidence-dot filled"></div>
+              <div class="confidence-dot filled"></div>
+            </div>
+            <span id="drawer-confidence-text" style="color: var(--found);">High (Exact Substring Match)</span>
+          </div>
+        </div>
+
+        <div class="drawer-quote-card">
+          <h4>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path></svg>
+            Verbatim Sourced Quote
+          </h4>
+          <div id="drawer-quote-text" class="drawer-quote-text">
+            "Applications open on August 15 and close strictly on November 15, 2026. No extensions will be granted."
+          </div>
+          <div class="quote-verification-pill">
+            ✔ Verified against raw document body (Offset #1420-1510)
+          </div>
+        </div>
+
+        <div class="setup-card" style="padding: 14px; margin: 0; background: var(--surface-alt);">
+          <div style="font-size: 12px; font-weight: 600; color: var(--text);">How We Evaluated This Aspect</div>
+          <div id="drawer-eval-desc" style="font-size: 13px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+            Extracted via JSON-LD and corroborated against section headers. The date was tagged with 2026 active cycle markers.
+          </div>
+        </div>
+
+        <div>
+          <a id="drawer-external-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: flex; justify-content: center; width: 100%;">
+            <span>Open Source Link</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paste Text Modal -->
+  <div id="paste-modal-backdrop" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size: 16px; font-weight: 700;">Paste Raw Text as a Source</h3>
+        <button id="close-paste-modal-btn" class="drawer-close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--muted);">Use this when a website blocks automated scrapers or requires a PDF copy-paste.</p>
+        <div class="form-group">
+          <label class="form-label">Source Title / Identifier</label>
+          <input type="text" id="paste-title-input" class="add-source-input" placeholder="e.g. Official Gazette PDF excerpt">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pasted Document Content</label>
+          <textarea id="paste-content-input" class="goal-textarea" rows="6" placeholder="Paste full notice text here..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button id="cancel-paste-btn" class="btn-secondary">Cancel</button>
+          <button id="confirm-paste-btn" class="btn-primary">Add Pasted Source</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Limits of this Analysis Modal -->
+  <div id="limits-modal-backdrop" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size: 16px; font-weight: 700;">Limits of This Analysis & Transparency</h3>
+        <button id="close-limits-modal-btn" class="drawer-close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="limit-stat-box">
+          <div>
+            <div class="limit-stat-number" style="color: var(--found);">0</div>
+            <div class="limit-stat-label">Dropped Claims (Quote Failures)</div>
+          </div>
+          <div>
+            <div class="limit-stat-number" style="color: var(--stale);">1</div>
+            <div class="limit-stat-label">Undated Forum Post</div>
+          </div>
+          <div>
+            <div class="limit-stat-number" style="color: var(--conflict);">1</div>
+            <div class="limit-stat-label">Stale Prior Cycle (2024-25)</div>
+          </div>
+        </div>
+
+        <div class="disclaimer-alert">
+          <strong>Transparency Standard:</strong> Every finding tagged <code>SOURCED</code> is strictly anchored to a verbatim excerpt from the collected text. Speculative inferences are explicitly flagged as <code>AI-SUGGESTED</code>.
+        </div>
+
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+          <strong>Legal & Accuracy Notice:</strong> DarkSpot Lens is an information gap detector designed to highlight potential discrepancies, omissions, and staleness signals. It does not replace the official notice or issuing authority. Always verify requirements with the official portal before taking financial, legal, or educational actions.
+        </p>
+
+        <button id="dismiss-limits-btn" class="btn-primary" style="width: 100%; justify-content: center;">
+          Understood & Acknowledge
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Toast -->
+  <div id="global-toast" class="toast">Copied to clipboard!</div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>DarkSpot Lens</strong> — Shinchan Online Hackathon 2026 · Team DEVENGERS
+      </div>
+      <div>
+        <span>Findings are potential signals, not verified facts · Always check official sources</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
